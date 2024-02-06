@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 
 const LoginScreen = () =>
@@ -17,7 +17,13 @@ const LoginScreen = () =>
         {
             if (user)
             {
-                navigation.replace("Home")
+                if (user.emailVerified)
+                {
+                    navigation.replace("Home")
+                } else
+                {
+                    alert('Please verify your email before signing in.');
+                }
             }
         })
         return unsubscribe
@@ -27,13 +33,26 @@ const LoginScreen = () =>
     const handleSignUp = () =>
     {
         createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredentials =>
+            .then((userCredentials) =>
             {
                 const user = userCredentials.user;
-                console.log('Registred with email: ', user.email);
+                console.log('Registered with email: ', user.email);
+                sendEmailVerification(user)
+                    .then(() =>
+                    {
+                        console.log('Verification email sent!');
+                    })
+                    .catch((error) =>
+                    {
+                        console.error('Error sending verification email: ', error);
+                    });
             })
-            .catch(error => alert(error.message));
+            .catch((error) =>
+            {
+                alert('Error creating user!');
+            });
     }
+
 
     const handleLogin = () =>
     {
@@ -41,7 +60,14 @@ const LoginScreen = () =>
             .then(userCredentials =>
             {
                 const user = userCredentials.user;
-                console.log('Logged in with: ', user.email);
+                if (user.emailVerified)
+                {
+                    console.log('Logged in with: ', user.email);
+                    navigation.replace("Home");
+                } else
+                {
+                    alert('Please verify your email before signing in.');
+                }
             })
             .catch(error => alert(error.message));
     }
