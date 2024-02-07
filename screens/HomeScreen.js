@@ -3,13 +3,16 @@ import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 
-const HomeScreen = () => {
+const HomeScreen = () =>
+{
 
     const navigation = useNavigation();
 
-    const handleSignOut = () => {
+    const handleSignOut = () =>
+    {
         auth.signOut()
-            .then(() => {
+            .then(() =>
+            {
                 navigation.replace("Login");
             })
             .catch(error => alert(error.message))
@@ -17,27 +20,31 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Email: {auth.currentUser?.email}</Text>
+            <View style={styles.userEmailandSignOut}>
+                <Text>Email: {auth.currentUser?.email}</Text>
 
-            <TouchableOpacity
-                style={styles.signOutButton}
-                onPress={handleSignOut}>
-                <Text
-                    style={styles.signOutButtonText}>Sign Out</Text>
-            </TouchableOpacity>    
+                <TouchableOpacity
+                    style={styles.signOutButton}
+                    onPress={handleSignOut}>
+                    <Text
+                        style={styles.signOutButtonText}>Log out</Text>
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.buttonRow}>
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: '#F95A2C' }]}
-                    onPress={() => {
+                    style={[styles.button, { backgroundColor: 'green' }]}
+                    onPress={() =>
+                    {
                         // Handle action for the first additional button
                     }}>
                     <Text style={styles.buttonText}>Information Hub</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: '#F95A2C', marginLeft: 10 }]}
-                    onPress={() => {
+                    style={[styles.button, { backgroundColor: 'green' }]}
+                    onPress={() =>
+                    {
                         // Handle action for the second additional button
                     }}>
                     <Text style={styles.buttonText}>Disease Alert</Text>
@@ -45,13 +52,14 @@ const HomeScreen = () => {
             </View>
 
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#F95A2C', marginLeft: 10 }]}
-                onPress={() => {
+                style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
+                onPress={() =>
+                {
                     // Handle action for the second additional button
                 }}>
                 <Text style={styles.buttonText}>Take a Photo</Text>
             </TouchableOpacity>
-            <View style={styles.HistoryView}>    
+            <View style={styles.HistoryView}>
                 <Text style={styles.HistoryText}>History:</Text>
             </View>
         </View>
@@ -69,28 +77,42 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#0782F9',
         width: '60%',
+        height: '140%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop: 20
-
+        margin: 5,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+        elevation: 6,
     },
-    signOutButton: {
+    userEmailandSignOut: {
         position: 'absolute',
         top: 10,
         right: 10,
-        backgroundColor: '#0782F9',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    signOutButton: {
+        backgroundColor: 'white',
         borderRadius: 10,
         alignItems: 'center',
-        zIndex: 1,
-      },
-      signOutButtonText: {
-        color: 'white',
-        fontWeight: '250',
+        borderColor: 'black',
+        borderWidth: 1,
+        marginLeft: 10
+    },
+    signOutButtonText: {
+        color: 'black',
+        fontWeight: '500',
         fontSize: 12,
         padding: 10
     },
-      
+
     buttonText: {
         color: 'white',
         fontWeight: '700',
@@ -99,10 +121,27 @@ const styles = StyleSheet.create({
     },
     buttonRow: {
         flexDirection: 'row',
-        marginTop: 20,
+        // marginTop: 10,
         alignItems: 'center',
         width: '75%',
         justifyContent: 'center',
+    },
+
+    buttonTakeaPhoto: {
+        backgroundColor: '#0782F9',
+        width: '60%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 100,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+        elevation: 6,
     },
 
     HistoryText: {

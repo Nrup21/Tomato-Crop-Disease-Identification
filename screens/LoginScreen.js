@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpaci
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
+import { Image } from 'react-native'
 
 const LoginScreen = () =>
 {
@@ -74,6 +75,7 @@ const LoginScreen = () =>
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
+            <Image source={require('../assets/TCDI.png')} style={styles.logo} />
             <View style={styles.inputContainer}>
                 <TextInput placeholder='Email'
                     value={email}
@@ -106,28 +108,38 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0.8,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    logo: {
+        width: 200,
+        height: 200,
+        marginTop: 130,
+        marginVertical: 40
+    },
+
     inputContainer: {
-        width: '80%'
+        width: '80%',
+        marginTop: 20
     },
     input: {
         backgroundColor: 'white',
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
-        marginTop: 5
+        marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 0.8
     },
     buttonContainer: {
-        width: '60%',
+        width: '44%',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40
     },
     button: {
-        backgroundColor: '#0782F9',
+        backgroundColor: 'green',
         width: '100%',
         padding: 15,
         borderRadius: 10,
@@ -136,7 +148,7 @@ const styles = StyleSheet.create({
     buttonOutline: {
         backgroundColor: 'white',
         marginTop: 5,
-        borderColor: '#0782F9',
+        borderColor: 'green',
         borderWidth: 2
     },
     buttonText: {
@@ -145,7 +157,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     buttonOutlineText: {
-        color: '#0782F9',
+        color: 'green',
         fontWeight: '700',
         fontSize: 16
     }
