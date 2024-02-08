@@ -4,51 +4,43 @@ import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
+import { getDatabase, ref, set } from "firebase/database";
 
-const LoginScreen = () =>
+const RegisterScreen = () =>
 {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [firstName, setFirstName] = useState('')
 
     const navigation = useNavigation();
 
-    useEffect(() =>
+    const handleSignUp = () =>
     {
-        const unsubscribe = auth.onAuthStateChanged(user =>
-        {
-            if (user)
-            {
-                if (user.emailVerified)
-                {
-                    navigation.replace("Home")
-                } else
-                {
-                    alert('Please verify your email before signing in.');
-                }
-            }
-        })
-        return unsubscribe
-    }
-        , [])
-
-    const handleLogin = () =>
-    {
-        signInWithEmailAndPassword(auth, email, password)
-            .then(userCredentials =>
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredentials) =>
             {
                 const user = userCredentials.user;
-                if (user.emailVerified)
-                {
-                    console.log('Logged in with: ', user.email);
-                    navigation.replace("Home");
-                } else
-                {
-                    alert('Please verify your email before signing in.');
-                }
+                console.log('Registered with email: ', user.email);
+                navigation.replace('Login');
+                sendEmailVerification(user)
+                    .then(() =>
+                    {
+                        console.log('Verification email sent!');
+                    })
+                    .catch((error) =>
+                    {
+                        console.error('Error sending verification email: ', error);
+                    });
+
+                // Save the first name to the database
+                const db = getDatabase();
+                set(ref(db, 'users/' + user.uid), {
+                    firstName: firstName,
+                });
             })
             .catch((error) =>
             {
-                alert('Please enter correct credentials or verify your email!');
+                alert('Error creating user!');
             });
     }
 
@@ -56,6 +48,10 @@ const LoginScreen = () =>
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Image source={require('../assets/TCDI.png')} style={styles.logo} />
             <View style={styles.inputContainer}>
+                <TextInput placeholder='First Name'
+                    value={firstName}
+                    onChangeText={text => setFirstName(text)}
+                    style={styles.input} />
                 <TextInput placeholder='Email'
                     value={email}
                     onChangeText={text => setEmail(text)}
@@ -69,21 +65,16 @@ const LoginScreen = () =>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    onPress={handleLogin}
-                    style={styles.button}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity
                     onPress={handleSignUp}
                     style={[styles.button, styles.buttonOutline]}>
                     <Text style={styles.buttonOutlineText}>Register</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     )
 }
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -141,3 +132,5 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 })
+
+
