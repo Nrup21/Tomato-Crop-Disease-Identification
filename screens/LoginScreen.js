@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
 
@@ -21,9 +21,6 @@ const LoginScreen = () =>
                 if (user.emailVerified)
                 {
                     navigation.replace("Home")
-                } else
-                {
-                    alert('Please verify your email before signing in.');
                 }
             }
         })
@@ -56,9 +53,10 @@ const LoginScreen = () =>
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Image source={require('../assets/TCDI.png')} style={styles.logo} />
             <View style={styles.inputContainer}>
-                <TextInput placeholder='Email'
+                <TextInput placeholder='Email address'
                     value={email}
                     onChangeText={text => setEmail(text)}
+                    keyboardType='email-address'
                     style={styles.input} autoCapitalize="none" />
                 <TextInput placeholder='Password'
                     value={password}
@@ -66,9 +64,9 @@ const LoginScreen = () =>
                     style={styles.input} autoCapitalize="none"
                     secureTextEntry />
 
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
-                        <Text>Forgot Password?</Text>
-                    </TouchableOpacity> */}
+                <TouchableOpacity style={{ marginTop: 10, alignSelf: 'center'}} onPress={() => navigation.navigate('ResetPassword')}>
+                    <Text style={{ fontWeight: 600, fontSize: 16 }}>Forgot Password?</Text>
+                </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -77,16 +75,11 @@ const LoginScreen = () =>
                     style={styles.button}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity
-                    onPress={handleSignUp}
-                    style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}>Register</Text>
-                </TouchableOpacity> */}
             </View>
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('Register')}>
-                <Text style={{ fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline'}}>Don't have an account? Register now.</Text>
+                <Text style={{ fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline' }}>Don't have an account? Register now.</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     )

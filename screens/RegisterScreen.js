@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
 import { getDatabase, ref, set } from "firebase/database";
@@ -52,9 +52,10 @@ const RegisterScreen = () =>
                     value={firstName}
                     onChangeText={text => setFirstName(text)}
                     style={styles.input} />
-                <TextInput placeholder='Email'
+                <TextInput placeholder='Email address'
                     value={email}
                     onChangeText={text => setEmail(text)}
+                    keyboardType='email-address'
                     style={styles.input} autoCapitalize="none"/>
                 <TextInput placeholder='Password'
                     value={password}
@@ -66,8 +67,8 @@ const RegisterScreen = () =>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={handleSignUp}
-                    style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}>Register</Text>
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
             </View>
 

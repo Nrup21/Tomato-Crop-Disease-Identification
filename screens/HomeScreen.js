@@ -8,42 +8,52 @@ const HomeScreen = () =>
 {
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
+    const [isAnonymous, setIsAnonymous] = useState(false);
 
     useEffect(() =>
     {
         if (auth.currentUser)
         {
-            const userId = auth.currentUser.uid;
-            const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
-            onValue(dbRef, (snapshot) =>
+            setIsAnonymous(auth.currentUser.isAnonymous);
+            if (auth.currentUser.isAnonymous)
             {
-                setFirstName(snapshot.val());
-            });
+                setFirstName('Guest');
+            } else
+            {
+                const userId = auth.currentUser.uid;
+                const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
+                onValue(dbRef, (snapshot) =>
+                {
+                    setFirstName(snapshot.val());
+                });
+            }
         }
     }, []);
 
     const handleSignOut = () =>
     {
-        auth.signOut()
-            .then(() =>
-            {
-                navigation.replace("Login");
-            })
-            .catch(error => alert(error.message))
+        if (!isAnonymous)
+        {
+            auth.signOut()
+                .then(() =>
+                {
+                    navigation.replace("Login");
+                })
+                .catch(error => alert(error.message))
+        }
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.userEmailandSignOut}>
-                {/* <Text>Email: {auth.currentUser?.email}</Text> */}
                 <Text>Hello, {firstName}</Text>
-
-                <TouchableOpacity
-                    style={styles.signOutButton}
-                    onPress={handleSignOut}>
-                    <Text
-                        style={styles.signOutButtonText}>Log out</Text>
-                </TouchableOpacity>
+                {!isAnonymous && (
+                    <TouchableOpacity
+                        style={styles.signOutButton}
+                        onPress={handleSignOut}>
+                        <Text style={styles.signOutButtonText}>Log out</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.buttonRow}>
