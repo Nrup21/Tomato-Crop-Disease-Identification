@@ -1,11 +1,26 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const HomeScreen = () =>
 {
     const navigation = useNavigation();
+    const [firstName, setFirstName] = useState('');
+
+    useEffect(() =>
+    {
+        if (auth.currentUser)
+        {
+            const userId = auth.currentUser.uid;
+            const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
+            onValue(dbRef, (snapshot) =>
+            {
+                setFirstName(snapshot.val());
+            });
+        }
+    }, []);
 
     const handleSignOut = () =>
     {
@@ -20,7 +35,8 @@ const HomeScreen = () =>
     return (
         <View style={styles.container}>
             <View style={styles.userEmailandSignOut}>
-                <Text>Email: {auth.currentUser?.email}</Text>
+                {/* <Text>Email: {auth.currentUser?.email}</Text> */}
+                <Text>Hello, {firstName}</Text>
 
                 <TouchableOpacity
                     style={styles.signOutButton}

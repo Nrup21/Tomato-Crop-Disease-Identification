@@ -55,11 +55,11 @@ const RegisterScreen = () =>
                 <TextInput placeholder='Email'
                     value={email}
                     onChangeText={text => setEmail(text)}
-                    style={styles.input} />
+                    style={styles.input} autoCapitalize="none"/>
                 <TextInput placeholder='Password'
                     value={password}
                     onChangeText={text => setPassword(text)}
-                    style={styles.input}
+                    style={styles.input} autoCapitalize="none"
                     secureTextEntry />
             </View>
 
@@ -70,6 +70,11 @@ const RegisterScreen = () =>
                     <Text style={styles.buttonOutlineText}>Register</Text>
                 </TouchableOpacity>
             </View>
+
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}>
+                <Text style={{ fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline'}}>Already have an account? Login now.</Text>
+            </TouchableOpacity>
         </KeyboardAvoidingView>
     )
 }
