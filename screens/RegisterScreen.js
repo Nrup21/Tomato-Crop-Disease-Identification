@@ -11,38 +11,122 @@ const RegisterScreen = () =>
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [firstName, setFirstName] = useState('')
+    const [suggestions, setSuggestions] = useState([]);
+    const [strength, setStrength] = useState('');
 
     const navigation = useNavigation();
 
+    useEffect(() =>
+    {
+        validatePassword(password);
+    }, [password]);
+
+    const validatePassword = (input) =>
+    {
+        let newSuggestions = [];
+        let satisfiedConditions = 0;
+
+        if (input.length >= 8)
+        {
+            satisfiedConditions++;
+        } else
+        {
+            newSuggestions.push('Password should be at least 8 characters long');
+        }
+
+        if (/\d/.test(input))
+        {
+            satisfiedConditions++;
+        } else
+        {
+            newSuggestions.push('Add at least one number');
+        }
+
+        if (/[A-Z]/.test(input))
+        {
+            satisfiedConditions++;
+        } else
+        {
+            newSuggestions.push('Include at least one uppercase letter');
+        }
+
+        if (/[a-z]/.test(input))
+        {
+            satisfiedConditions++;
+        } else
+        {
+            newSuggestions.push('Include at least one lowercase letter');
+        }
+
+        if (/[^A-Za-z0-9]/.test(input))
+        {
+            satisfiedConditions++;
+        } else
+        {
+            newSuggestions.push('Include at least one special character');
+        }
+
+        setSuggestions(newSuggestions);
+
+        switch (satisfiedConditions)
+        {
+            case 5:
+                setStrength('Very Strong');
+                break;
+            case 4:
+                setStrength('Strong');
+                break;
+            case 3:
+                setStrength('Moderate');
+                break;
+            case 2:
+                setStrength('Weak');
+                break;
+            default:
+                setStrength('Very Weak');
+                break;
+        }
+    };
+
     const handleSignUp = () =>
     {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) =>
-            {
-                const user = userCredentials.user;
-                console.log('Registered with email: ', user.email);
-                navigation.replace('Login');
-                sendEmailVerification(user)
-                    .then(() =>
-                    {
-                        console.log('Verification email sent!');
-                    })
-                    .catch((error) =>
-                    {
-                        console.error('Error sending verification email: ', error);
-                    });
+        // Check if all password validations are met
+        if (strength === 'Very Strong')
+        {
+            // If validations are met, proceed with user registration
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredentials) =>
+                {
+                    const user = userCredentials.user;
+                    console.log('Registered with email: ', user.email);
+                    navigation.replace('Login');
+                    sendEmailVerification(user)
+                        .then(() =>
+                        {
+                            console.log('Verification email sent!');
+                        })
+                        .catch((error) =>
+                        {
+                            console.error('Error sending verification email: ', error);
+                        });
 
-                // Save the first name to the database
-                const db = getDatabase();
-                set(ref(db, 'users/' + user.uid), {
-                    firstName: firstName,
+                    // Save the first name to the database
+                    const db = getDatabase();
+                    set(ref(db, 'users/' + user.uid), {
+                        firstName: firstName,
+                    });
+                })
+                .catch((error) =>
+                {
+                    alert('Error creating user!');
                 });
-            })
-            .catch((error) =>
-            {
-                alert('Error creating user!');
-            });
+        } else
+        {
+            // If password validations are not met, display an error message or handle it accordingly
+            alert('Password does not meet the requirements');
+        }
     }
+
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
@@ -56,12 +140,18 @@ const RegisterScreen = () =>
                     value={email}
                     onChangeText={text => setEmail(text)}
                     keyboardType='email-address'
-                    style={styles.input} autoCapitalize="none"/>
+                    style={styles.input} autoCapitalize="none" />
                 <TextInput placeholder='Password'
                     value={password}
                     onChangeText={text => setPassword(text)}
                     style={styles.input} autoCapitalize="none"
                     secureTextEntry />
+                <Text style={styles.strengthText}>Password Strength: {strength}</Text>
+                {suggestions.map((suggestion, index) => (
+                    <Text key={index} style={styles.suggestionText}>
+                        {suggestion}
+                    </Text>
+                ))}
             </View>
 
             <View style={styles.buttonContainer}>
@@ -74,7 +164,7 @@ const RegisterScreen = () =>
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('Login')}>
-                <Text style={{ fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline'}}>Already have an account? Login now.</Text>
+                <Text style={{ fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline' }}>Already have an account? Login now.</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     )
@@ -136,7 +226,34 @@ const styles = StyleSheet.create({
         color: 'green',
         fontWeight: '700',
         fontSize: 16
-    }
+    },
+    suggestionText: {
+        color: 'red',
+    },
+    strengthText: {
+        fontWeight: 'bold',
+    },
+    passwordValidatorContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    strengthText: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#007700',
+    },
+    suggestionsText: {
+        color: '#000',
+        flex: 1,
+    },
+    strengthMeter: {
+        width: '80%',
+        height: 20,
+        backgroundColor: '#ccc',
+        marginTop: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
 })
 
 
