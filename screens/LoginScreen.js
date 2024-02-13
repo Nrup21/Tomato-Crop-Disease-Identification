@@ -64,7 +64,7 @@ const LoginScreen = () =>
                     style={styles.input} autoCapitalize="none"
                     secureTextEntry />
 
-                <TouchableOpacity style={{ marginTop: 10, alignSelf: 'center'}} onPress={() => navigation.navigate('ResetPassword')}>
+                <TouchableOpacity style={{ marginTop: 10, alignSelf: 'center'}} onPress={() => navigation.navigate('Reset Password')}>
                     <Text style={{ fontWeight: 600, fontSize: 16 }}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>
