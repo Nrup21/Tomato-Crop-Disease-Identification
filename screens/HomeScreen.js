@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
-import { auth } from '../firebase'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
+import { auth } from '../firebase';
+import { useNavigation } from '@react-navigation/native';
 import { getDatabase, ref, onValue } from "firebase/database";
+import CameraComponent from '../components/CameraComponent';
+import { Camera } from 'expo-camera';
 
 const HomeScreen = () =>
 {
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
+    const [hasPermission, setHasPermission] = useState(null);
 
     useEffect(() =>
     {
@@ -43,55 +46,79 @@ const HomeScreen = () =>
         }
     }
 
+    const handleTakePhoto = async () =>
+    {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+        if (hasPermission)
+        {
+            navigation.navigate('Camera');
+        } else
+        {
+            Alert.alert(
+                "Permission Required",
+                "Allow AgroTech to take pictures?",
+                [
+                    {
+                        text: "DENY",
+                        onPress: () =>
+                        {
+                            setHasPermission(false); // Reset permission status
+                        },
+                        style: "cancel"
+                    },
+                    { text: "ALLOW", onPress: setHasPermission(true) }
+                ]
+            );
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.userEmailandSignOut}>
-                <Text>Hello, {firstName}</Text>
-                {!isAnonymous && (
+            <>
+                <View style={styles.userEmailandSignOut}>
+                    <Text>Hello, {firstName}</Text>
+                    {!isAnonymous && (
+                        <TouchableOpacity
+                            style={styles.signOutButton}
+                            onPress={handleSignOut}>
+                            <Text style={styles.signOutButtonText}>Log out</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
+                <View style={styles.buttonRow}>
                     <TouchableOpacity
-                        style={styles.signOutButton}
-                        onPress={handleSignOut}>
-                        <Text style={styles.signOutButtonText}>Log out</Text>
+                        style={[styles.button, { backgroundColor: 'green' }]}
+                        onPress={() =>
+                        {
+                            // Handle action for the first additional button
+                        }}>
+                        <Text style={styles.buttonText}>Information Hub</Text>
                     </TouchableOpacity>
-                )}
-            </View>
 
-            <View style={styles.buttonRow}>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() =>
-                    {
-                        // Handle action for the first additional button
-                    }}>
-                    <Text style={styles.buttonText}>Information Hub</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, { backgroundColor: 'green' }]}
+                        onPress={() =>
+                        {
+                            // Handle action for the second additional button
+                        }}>
+                        <Text style={styles.buttonText}>Disease Alert</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() =>
-                    {
-                        // Handle action for the second additional button
-                    }}>
-                    <Text style={styles.buttonText}>Disease Alert</Text>
+                    style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
+                    onPress={handleTakePhoto}>
+                    <Text style={styles.buttonText}>Take a Photo</Text>
                 </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-                style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
-                onPress={() =>
-                {
-                    // Handle action for the second additional button
-                }}>
-                <Text style={styles.buttonText}>Take a Photo</Text>
-            </TouchableOpacity>
-            <View style={styles.HistoryView}>
-                <Text style={styles.HistoryText}>History:</Text>
-            </View>
+                <View style={styles.HistoryView}>
+                    <Text style={styles.HistoryText}>History:</Text>
+                </View>
+            </>
         </View>
     );
 };
-
-export default HomeScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -180,3 +207,5 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     }
 });
+
+export default HomeScreen;
