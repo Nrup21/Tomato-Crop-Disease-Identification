@@ -1,28 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Text, TouchableOpacity, Image, View, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const CameraComponent = () => {
+const CameraComponent = () =>
+{
     const [photo, setPhoto] = useState(null);
     const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+    const cameraRef = useRef(null);
 
-    const takePicture = async () => {
-        if (this.camera) {
-            let photo = await this.camera.takePictureAsync();
+    const takePicture = async () =>
+    {
+        if (cameraRef.current)
+        {
+            let photo = await cameraRef.current.takePictureAsync();
             setPhoto(photo.uri);
         }
     }
 
-    const retakePicture = () => {
+    const retakePicture = () =>
+    {
         setPhoto(null);
     }
 
-    const analyzePicture = () => {
-        // Handle picture analysis here
+    const analyzePicture = async () =>
+    {
+        if (!photo) return; // No photo to analyze
+
+        const formData = new FormData();
+        formData.append('image', {
+            uri: photo,
+            type: 'image/jpeg',
+            name: 'photo.jpg',
+        });
+
+        try
+        {
+            const response = await fetch('https://tcdi-flask-app.onrender.com/predict', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const data = await response.json();
+            alert('Prediction: ' + data.prediction);
+        } catch (error)
+        {
+            console.error('Error analyzing picture:', error);
+            alert('An error occurred while analyzing the picture');
+        }
     }
 
-    const toggleFlash = () => {
+    const toggleFlash = () =>
+    {
         setFlashMode(
             flashMode === Camera.Constants.FlashMode.off
                 ? Camera.Constants.FlashMode.on
@@ -44,7 +75,7 @@ const CameraComponent = () => {
                 </View>
             </View>
         ) : (
-            <Camera style={styles.container} flashMode={flashMode} ref={ref => {this.camera = ref;}}>
+            <Camera style={styles.container} flashMode={flashMode} ref={cameraRef}>
                 <View style={styles.captureButtonContainer}>
                     <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
                         {/* <Text style={styles.buttonText}>Take Picture</Text> */}
