@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
 import { getDatabase, ref, set } from "firebase/database";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const RegisterScreen = () =>
 {
@@ -13,6 +14,9 @@ const RegisterScreen = () =>
     const [firstName, setFirstName] = useState('')
     const [suggestions, setSuggestions] = useState([]);
     const [strength, setStrength] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
 
     const navigation = useNavigation();
 
@@ -88,6 +92,31 @@ const RegisterScreen = () =>
         }
     };
 
+    const getColorForStrength = (strength) =>
+    {
+        switch (strength)
+        {
+            case 'Very Weak':
+                return 'red';
+            case 'Weak':
+                return '#FF5F1F';
+            case 'Moderate':
+                return '#F4BB44';
+            case 'Strong':
+                return '#32CD32';
+            case 'Very Strong':
+                return 'green';
+            default:
+                return 'black';
+        }
+    };
+
+
+    const toggleShowPassword = () =>
+    {
+        setShowPassword(!showPassword);
+    };
+
     const handleSignUp = () =>
     {
         // Check if all password validations are met
@@ -141,13 +170,31 @@ const RegisterScreen = () =>
                     onChangeText={text => setEmail(text)}
                     keyboardType='email-address'
                     style={styles.input} autoCapitalize="none" />
-                <TextInput placeholder='Password'
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input} autoCapitalize="none"
-                    secureTextEntry />
-                <Text style={styles.strengthText}>Password Strength: {strength}</Text>
-                {suggestions.map((suggestion, index) => (
+                <View style={styles.passwordInputContainer}>
+                    <TextInput
+                        placeholder='Password'
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style={styles.passwordInput}
+                        autoCapitalize="none"
+                        secureTextEntry={!showPassword}
+                        onFocus={() => setIsPasswordFocused(true)}
+                        onBlur={() => setIsPasswordFocused(false)}
+                    />
+                    <MaterialCommunityIcons
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={24}
+                        color="#aaa"
+                        style={styles.icon}
+                        onPress={toggleShowPassword}
+                    />
+                </View>
+                {isPasswordFocused &&
+                    <Text style={{ ...styles.strengthText, color: getColorForStrength(strength) }}>
+                        Password Strength: {strength}
+                    </Text>
+                }
+                {isPasswordFocused && suggestions.map((suggestion, index) => (
                     <Text key={index} style={styles.suggestionText}>
                         {suggestion}
                     </Text>
@@ -198,6 +245,28 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 0.8
     },
+    passwordInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: '100%',
+    },
+    passwordInput: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 0.8
+    },
+    icon: {
+        position: 'absolute',
+        right: 12,
+        top: '35%',
+        color: '#333',
+    },
     buttonContainer: {
         width: '44%',
         justifyContent: 'center',
@@ -228,10 +297,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     suggestionText: {
-        color: 'red',
-    },
-    strengthText: {
-        fontWeight: 'bold',
+        color: '#FF4433',
     },
     passwordValidatorContainer: {
         marginTop: 20,
@@ -240,7 +306,7 @@ const styles = StyleSheet.create({
     strengthText: {
         fontWeight: 'bold',
         fontSize: 18,
-        color: '#007700',
+        // color: '#007700',
     },
     suggestionsText: {
         color: '#000',
