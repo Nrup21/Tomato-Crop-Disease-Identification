@@ -3,119 +3,97 @@ import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { getDatabase, ref, onValue } from "firebase/database";
-import CameraComponent from '../components/CameraComponent';
 import { Camera } from 'expo-camera';
 
-const HomeScreen = () =>
-{
+const HomeScreen = () => {
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [hasPermission, setHasPermission] = useState(null);
 
-    useEffect(() =>
-    {
-        if (auth.currentUser)
-        {
+    useEffect(() => {
+        if (auth.currentUser) {
             setIsAnonymous(auth.currentUser.isAnonymous);
-            if (auth.currentUser.isAnonymous)
-            {
+            if (auth.currentUser.isAnonymous) {
                 setFirstName('Guest');
-            } else
-            {
+            } else {
                 const userId = auth.currentUser.uid;
                 const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
-                onValue(dbRef, (snapshot) =>
-                {
+                onValue(dbRef, (snapshot) => {
                     setFirstName(snapshot.val());
                 });
             }
         }
     }, []);
 
-    const handleSignOut = () =>
-    {
-        if (!isAnonymous)
-        {
+    const handleSignOut = () => {
+        if (!isAnonymous) {
             auth.signOut()
-                .then(() =>
-                {
+                .then(() => {
                     navigation.replace("Login");
                 })
-                .catch(error => alert(error.message))
+                .catch(error => Alert.alert('Error', error.message));
         }
-    }
+    };
 
-    const handleTakePhoto = async () =>
-    {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        setHasPermission(status === 'granted');
-        if (hasPermission)
-        {
+    const handleTakePhoto = async () => {
+        const { status } = await Camera.requestPermissionsAsync();
+        if (status === 'granted') {
             navigation.navigate('Camera');
-        } else
-        {
+        } else {
             Alert.alert(
                 "Permission Required",
                 "Allow AgroTech to take pictures?",
                 [
                     {
                         text: "DENY",
-                        onPress: () =>
-                        {
-                            setHasPermission(false); // Reset permission status
-                        },
+                        onPress: () => setHasPermission(false),
                         style: "cancel"
                     },
-                    { text: "ALLOW", onPress: setHasPermission(true) }
+                    { text: "ALLOW", onPress: () => setHasPermission(true) }
                 ]
             );
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
-            <>
-                <View style={styles.userEmailandSignOut}>
-                    <Text>Hello, {firstName}</Text>
-                    {!isAnonymous && (
-                        <TouchableOpacity
-                            style={styles.signOutButton}
-                            onPress={handleSignOut}>
-                            <Text style={styles.signOutButtonText}>Log out</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-
-                <View style={styles.buttonRow}>
+            <View style={styles.userEmailandSignOut}>
+                <Text>Hello, {firstName}</Text>
+                {!isAnonymous && (
                     <TouchableOpacity
-                        style={[styles.button, { backgroundColor: 'green' }]}
-                        onPress={() =>
-                        {
-                            // Handle action for the first additional button
-                        }}>
-                        <Text style={styles.buttonText}>Information Hub</Text>
+                        style={styles.signOutButton}
+                        onPress={handleSignOut}>
+                        <Text style={styles.signOutButtonText}>Log out</Text>
                     </TouchableOpacity>
+                )}
+            </View>
 
-                    <TouchableOpacity
-                        style={[styles.button, { backgroundColor: 'green' }]}
-                        onPress={() =>
-                        {
-                            // Handle action for the second additional button
-                        }}>
-                        <Text style={styles.buttonText}>Disease Alert</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.buttonRow}>
+                <TouchableOpacity
+                    style={[styles.button, { backgroundColor: 'green' }]}
+                    onPress={() => navigation.navigate('Information Hub')}>
+                    <Text style={styles.buttonText}>Information Hub</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
-                    onPress={handleTakePhoto}>
-                    <Text style={styles.buttonText}>Take a Photo</Text>
+                    style={[styles.button, { backgroundColor: 'green' }]}
+                    onPress={() => {
+                        // Handle action for the second additional button
+                    }}>
+                    <Text style={styles.buttonText}>Disease Alert</Text>
                 </TouchableOpacity>
-                <View style={styles.HistoryView}>
-                    <Text style={styles.HistoryText}>History:</Text>
-                </View>
-            </>
+            </View>
+
+            <TouchableOpacity
+                style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
+                onPress={handleTakePhoto}>
+                <Text style={styles.buttonText}>Take a Photo</Text>
+            </TouchableOpacity>
+
+            <View style={styles.HistoryView}>
+                <Text style={styles.HistoryText}>History:</Text>
+            </View>
         </View>
     );
 };
@@ -128,8 +106,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#0782F9',
-        width: '60%',
-        height: '140%',
+        width: '45%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -164,7 +141,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         padding: 10
     },
-
     buttonText: {
         color: 'white',
         fontWeight: '700',
@@ -173,19 +149,17 @@ const styles = StyleSheet.create({
     },
     buttonRow: {
         flexDirection: 'row',
-        // marginTop: 10,
-        alignItems: 'center',
-        width: '75%',
-        justifyContent: 'center',
+        marginTop: 20,
+        justifyContent: 'space-between',
+        width: '90%',
     },
-
     buttonTakeaPhoto: {
         backgroundColor: '#0782F9',
-        width: '60%',
+        width: '45%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop: 100,
+        marginTop: 20,
         shadowColor: 'black',
         shadowOffset: {
             width: 0,
@@ -195,7 +169,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 6,
     },
-
     HistoryText: {
         fontWeight: '700',
         fontSize: 16,

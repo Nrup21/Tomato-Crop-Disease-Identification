@@ -3,10 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
+import InformationHubScreen from './screens/InformationHubScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import CameraComponent from './components/CameraComponent';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,7 @@ const App = () =>
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name='Reset Password' component={ResetPasswordScreen} />
                 <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Information Hub" component={InformationHubScreen} />
                 <Stack.Screen name="Camera" component={CameraComponent} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
