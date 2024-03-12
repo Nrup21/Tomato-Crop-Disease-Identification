@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import tomatoDiseasesData from '../assets/tomato_diseases.json';
+
 
 const InformationHubScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [openCardId, setOpenCardId] = useState(null);
-    const [cards, setCards] = useState([
-        { id: 1, heading: 'Early Blight', content: 'Content for card 1' },
-        { id: 2, heading: 'Late Blight', content: 'Content for card 2' },
-        { id: 3, heading: 'Spot', content: 'Content for card 3' },
-        { id: 4, heading: 'Healthy', content: 'Content for card 4' },
-        { id: 5, heading: 'Healthy1', content: 'Content for card 5' },
-        { id: 6, heading: 'Healthy2', content: 'Content for card 6' },
-        { id: 7, heading: 'Healthy3', content: 'Content for card 7' },
-        { id: 8, heading: 'Healthy4', content: 'Content for card 8' },
-        // ...add as many cards as needed
-    ]);
+    const [cards, setCards] = useState(tomatoDiseasesData.map((disease, index) => ({
+        id: index + 1, // Assuming the id is just a unique number starting from 1
+        heading: disease.name,
+        information: disease.information,
+        prevention_and_treatment: disease.prevention_and_treatment,
+    })));
 
 
 
@@ -50,7 +47,12 @@ const InformationHubScreen = () => {
                 {filteredCards.map((card) => (
                     <TouchableOpacity key={card.id} style={styles.card} onPress={() => toggleCard(card.id)}>
                         <Text style={styles.heading}>{card.heading}</Text>
-                        {openCardId === card.id && <Text>{card.content}</Text>}
+                        {openCardId === card.id && <Text>
+                            <Text style={{ fontWeight: 'bold'}}>Information:</Text>
+                            <Text>{'\n' + card.information + '\n\n'}</Text>
+                            <Text style={{ fontWeight: 'bold'}}>Prevention and Treatment:</Text>
+                            <Text>{'\n' + card.prevention_and_treatment}</Text>
+                        </Text>}
                     </TouchableOpacity>
                 ))}
             </ScrollView>

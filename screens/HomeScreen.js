@@ -37,7 +37,7 @@ const HomeScreen = () => {
     };
 
     const handleTakePhoto = async () => {
-        const { status } = await Camera.requestPermissionsAsync();
+        const { status } = await Camera.requestCameraPermissionsAsync();
         if (status === 'granted') {
             navigation.navigate('Camera');
         } else {
@@ -72,15 +72,17 @@ const HomeScreen = () => {
             <View style={styles.buttonRow}>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() => navigation.navigate('Information Hub')}>
+                    onPress={() => 
+                        navigation.navigate('Information Hub')
+                    }>
                     <Text style={styles.buttonText}>Information Hub</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() => {
-                        // Handle action for the second additional button
-                    }}>
+                    onPress={() =>
+                        navigation.navigate('Contact Us')
+                    }>
                     <Text style={styles.buttonText}>Disease Alert</Text>
                 </TouchableOpacity>
             </View>
