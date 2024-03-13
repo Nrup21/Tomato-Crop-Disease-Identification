@@ -4,11 +4,13 @@ import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LoginScreen = () =>
 {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigation = useNavigation();
 
@@ -49,6 +51,11 @@ const LoginScreen = () =>
             });
     }
 
+    const toggleShowPassword = () =>
+    {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
             <Image source={require('../assets/TCDI.png')} style={styles.logo} />
@@ -58,13 +65,22 @@ const LoginScreen = () =>
                     onChangeText={text => setEmail(text)}
                     keyboardType='email-address'
                     style={styles.input} autoCapitalize="none" />
-                <TextInput placeholder='Password'
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input} autoCapitalize="none"
-                    secureTextEntry />
-
-                <TouchableOpacity style={{ marginTop: 10, alignSelf: 'center'}} onPress={() => navigation.navigate('Reset Password')}>
+                <View style={styles.passwordInputContainer}>
+                    <TextInput placeholder='Password'
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style={styles.passwordInput} autoCapitalize="none"
+                        secureTextEntry={!showPassword}
+                    />
+                    <MaterialCommunityIcons
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={24}
+                        color="#aaa"
+                        style={styles.icon}
+                        onPress={toggleShowPassword}
+                    />
+                </View>
+                <TouchableOpacity style={{ marginTop: 10, alignSelf: 'center' }} onPress={() => navigation.navigate('Reset Password')}>
                     <Text style={{ fontWeight: 600, fontSize: 16 }}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>
@@ -113,6 +129,28 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 0.8
     },
+    passwordInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: '100%',
+    },
+    passwordInput: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 0.8
+    },
+    icon: {
+        position: 'absolute',
+        right: 12,
+        top: '35%',
+        color: '#333',
+    },
     buttonContainer: {
         width: '44%',
         justifyContent: 'center',
@@ -120,7 +158,7 @@ const styles = StyleSheet.create({
         marginTop: 40
     },
     button: {
-        backgroundColor: 'green',
+        backgroundColor: '#2F4F4F',
         width: '100%',
         padding: 15,
         borderRadius: 10,

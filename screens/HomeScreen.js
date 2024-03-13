@@ -4,43 +4,83 @@ import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { getDatabase, ref, onValue } from "firebase/database";
 import { Camera } from 'expo-camera';
+import { FontAwesome } from '@expo/vector-icons';
 
-const HomeScreen = () => {
+const ProgressBar = ({ steps }) =>
+{
+    return (
+        <View style={styles.progressBar}>
+            {steps.map((step, index) => (
+                <React.Fragment key={index}>
+                    <View style={styles.stepContainer}>
+                        <FontAwesome name={step.icon} size={30} color='black' />
+                        <Text style={styles.stepText}>{step.name}</Text>
+                    </View>
+                    {index < steps.length - 1 && (
+                        <View style={styles.arrowContainer}>
+                            <FontAwesome name="angle-right" size={30} color='black' />
+                        </View>
+                    )}
+                </React.Fragment>
+            ))}
+        </View>
+    );
+};
+
+const HomeScreen = () =>
+{
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [hasPermission, setHasPermission] = useState(null);
 
-    useEffect(() => {
-        if (auth.currentUser) {
+    const steps = [
+        { name: 'Take a picture', icon: 'camera-retro' },
+        { name: 'See diagnosis', icon: 'stethoscope' },
+        { name: 'Get medicine', icon: 'medkit' },
+    ];
+
+    useEffect(() =>
+    {
+        if (auth.currentUser)
+        {
             setIsAnonymous(auth.currentUser.isAnonymous);
-            if (auth.currentUser.isAnonymous) {
+            if (auth.currentUser.isAnonymous)
+            {
                 setFirstName('Guest');
-            } else {
+            } else
+            {
                 const userId = auth.currentUser.uid;
                 const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
-                onValue(dbRef, (snapshot) => {
+                onValue(dbRef, (snapshot) =>
+                {
                     setFirstName(snapshot.val());
                 });
             }
         }
     }, []);
 
-    const handleSignOut = () => {
-        if (!isAnonymous) {
+    const handleSignOut = () =>
+    {
+        if (!isAnonymous)
+        {
             auth.signOut()
-                .then(() => {
+                .then(() =>
+                {
                     navigation.replace("Login");
                 })
                 .catch(error => Alert.alert('Error', error.message));
         }
     };
 
-    const handleTakePhoto = async () => {
+    const handleTakePhoto = async () =>
+    {
         const { status } = await Camera.requestCameraPermissionsAsync();
-        if (status === 'granted') {
+        if (status === 'granted')
+        {
             navigation.navigate('Camera');
-        } else {
+        } else
+        {
             Alert.alert(
                 "Permission Required",
                 "Allow AgroTech to take pictures?",
@@ -71,27 +111,28 @@ const HomeScreen = () => {
 
             <View style={styles.buttonRow}>
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() => 
-                        navigation.navigate('Information Hub')
-                    }>
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Information Hub')}>
                     <Text style={styles.buttonText}>Information Hub</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: 'green' }]}
-                    onPress={() =>
-                        navigation.navigate('Contact Us')
-                    }>
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Contact Us')}>
                     <Text style={styles.buttonText}>Disease Alert</Text>
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-                style={[styles.buttonTakeaPhoto, { backgroundColor: 'green', marginLeft: 10 }]}
-                onPress={handleTakePhoto}>
-                <Text style={styles.buttonText}>Take a Photo</Text>
-            </TouchableOpacity>
+            <Text style={styles.title}>Heal your crop</Text>
+
+            <View style={styles.progressContainer}>
+                <ProgressBar steps={steps} />
+                <TouchableOpacity
+                    style={[styles.buttonTakeaPhoto]}
+                    onPress={handleTakePhoto}>
+                    <Text style={[styles.buttonText, { color: 'white'}]}>Take a Photo</Text>
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.HistoryView}>
                 <Text style={styles.HistoryText}>History:</Text>
@@ -103,24 +144,47 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#0782F9',
-        width: '45%',
-        padding: 15,
-        borderRadius: 10,
         alignItems: 'center',
-        margin: 5,
+        padding: 20,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        alignSelf: 'flex-start'
+    },
+    progressContainer: {
+        backgroundColor: '#E0F8D8', // Light gray background color
+        borderColor: 'black',
+        borderWidth: 0,
+        borderRadius: 10,
+        padding: 10,
         shadowColor: 'black',
         shadowOffset: {
-            width: 0,
-            height: 4,
+          width: 0,
+          height: 4, // Shadow below the container
         },
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 6,
+        width: '100%',
+      },
+    progressBar: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    stepContainer: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10,
+    },
+    stepText: {
+        color: 'black',
+        marginTop: 20,
+    },
+    stepTextActive: {
+        color: 'green',
     },
     userEmailandSignOut: {
         position: 'absolute',
@@ -144,22 +208,16 @@ const styles = StyleSheet.create({
         padding: 10
     },
     buttonText: {
-        color: 'white',
+        color: 'black',
         fontWeight: '700',
         fontSize: 16,
         paddingVertical: 20
     },
-    buttonRow: {
-        flexDirection: 'row',
-        marginTop: 20,
-        justifyContent: 'space-between',
-        width: '90%',
-    },
     buttonTakeaPhoto: {
-        backgroundColor: '#0782F9',
-        width: '45%',
-        padding: 15,
-        borderRadius: 10,
+        backgroundColor: '#2F4F4F',
+        width: '100%',
+        // padding: 15,
+        borderRadius: 30,
         alignItems: 'center',
         marginTop: 20,
         shadowColor: 'black',
@@ -180,7 +238,34 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginTop: 20,
         marginLeft: 10,
-    }
+    },
+    arrowContainer: {
+        // justifyContent: 'center',
+        marginTop: 20
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 20,
+        marginVertical: 40
+    },
+    button: {
+        flex: 1,
+        backgroundColor: '#E0F8D8',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        margin: 5,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+        elevation: 6,
+    },
 });
 
 export default HomeScreen;
