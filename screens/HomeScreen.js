@@ -117,9 +117,14 @@ const HomeScreen = () =>
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>Disease Alert</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Contact Us')}>
-                    <Text style={styles.buttonText}>Disease Alert</Text>
+                    <Text style={styles.buttonText}>About Us</Text>
                 </TouchableOpacity>
             </View>
 
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: '700',
         fontSize: 16,
-        paddingVertical: 20
+        paddingVertical: 20,
     },
     buttonTakeaPhoto: {
         backgroundColor: '#2F4F4F',
