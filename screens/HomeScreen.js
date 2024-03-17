@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import { auth } from '../firebase';
+import { Text, StyleSheet, View, TouchableOpacity, Alert, Image, ScrollView } from 'react-native';
+import { auth, db } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { getDatabase, ref, onValue } from "firebase/database";
+import { collection, doc, getDocs } from "firebase/firestore";
 import { Camera } from 'expo-camera';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -33,6 +34,7 @@ const HomeScreen = () =>
     const [firstName, setFirstName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [hasPermission, setHasPermission] = useState(null);
+    const [history, setHistory] = useState([]);
 
     const steps = [
         { name: 'Take a picture', icon: 'camera-retro' },
@@ -59,6 +61,25 @@ const HomeScreen = () =>
             }
         }
     }, []);
+
+    useEffect(() =>
+    {
+        const fetchData = async () =>
+        {
+            const userDocRef = doc(db, "results", auth.currentUser.uid);
+            const querySnapshot = await getDocs(collection(userDocRef, "data"));
+            const historyData = [];
+            querySnapshot.forEach((doc) =>
+            {
+                // console.log(doc.data());  // Log the data
+                historyData.push(doc.data());
+            });
+            setHistory(historyData);
+        };
+
+        fetchData();
+    }, []);
+
 
     const handleSignOut = () =>
     {
@@ -135,13 +156,25 @@ const HomeScreen = () =>
                 <TouchableOpacity
                     style={[styles.buttonTakeaPhoto]}
                     onPress={handleTakePhoto}>
-                    <Text style={[styles.buttonText, { color: 'white'}]}>Take a Photo</Text>
+                    <Text style={[styles.buttonText, { color: 'white' }]}>Take a Photo</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.HistoryView}>
-                <Text style={styles.HistoryText}>History:</Text>
+                <Text style={styles.HistoryText}>History</Text>
+                <ScrollView style={{ maxHeight: 250, width: 350 }}>
+                    {history.map((item, index) => (
+                        <View key={index} style={styles.itemContainer}>
+                            <Image source={{ uri: item.imageUri }} style={styles.image} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.text}>Prediction: {item.prediction}</Text>
+                                <Text style={styles.text}>Confidence: {item.confidence}</Text>
+                            </View>
+                        </View>
+                    ))}
+                </ScrollView>
             </View>
+
         </View>
     );
 };
@@ -166,14 +199,14 @@ const styles = StyleSheet.create({
         padding: 10,
         shadowColor: 'black',
         shadowOffset: {
-          width: 0,
-          height: 4, // Shadow below the container
+            width: 0,
+            height: 4, // Shadow below the container
         },
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 6,
         width: '100%',
-      },
+    },
     progressBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -236,8 +269,8 @@ const styles = StyleSheet.create({
     },
     HistoryText: {
         fontWeight: '700',
-        fontSize: 16,
-        marginLeft: 10,
+        fontSize: 20,
+        marginBottom: 10
     },
     HistoryView: {
         alignSelf: 'flex-start',
@@ -270,6 +303,30 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 6,
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginBottom: 5,
+        padding: 5,
+        backgroundColor: 'lightgray',
+        borderRadius: 8,
+        borderColor: 'black',
+        borderWidth: 0.5,
+    },
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+    textContainer: {
+        // flexDirection: 'row',
+        marginLeft: 10,
+    },
+    text: {
+        fontSize: 13,
+        fontWeight: 'bold',
     },
 });
 
