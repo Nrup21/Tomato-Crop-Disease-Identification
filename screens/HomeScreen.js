@@ -120,7 +120,7 @@ const HomeScreen = () =>
     return (
         <View style={styles.container}>
             <View style={styles.userEmailandSignOut}>
-                <Text>Hello, {firstName}</Text>
+                <Text style={{fontWeight: 'bold'}}>Hello, {firstName}</Text>
                 {!isAnonymous && (
                     <TouchableOpacity
                         style={styles.signOutButton}
@@ -160,21 +160,27 @@ const HomeScreen = () =>
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.HistoryView}>
-                <Text style={styles.HistoryText}>History</Text>
-                <ScrollView style={{ maxHeight: 250, width: 350 }}>
-                    {history.map((item, index) => (
-                        <View key={index} style={styles.itemContainer}>
-                            <Image source={{ uri: item.imageUri }} style={styles.image} />
-                            <View style={styles.textContainer}>
-                                <Text style={styles.text}>Prediction: {item.prediction}</Text>
-                                <Text style={styles.text}>Confidence: {item.confidence}</Text>
+            {!isAnonymous ? (
+                <View style={styles.HistoryView}>
+                    <Text style={styles.HistoryText}>History</Text>
+                    <ScrollView style={{ maxHeight: 250, width: 350 }}>
+                        {history.map((item, index) => (
+                            <View key={index} style={styles.itemContainer}>
+                                <Image source={{ uri: item.imageUri }} style={styles.image} />
+                                <View style={styles.textContainer}>
+                                    <Text style={styles.text}>Prediction: {item.prediction}</Text>
+                                    <Text style={styles.text}>Confidence: {item.confidence}</Text>
+                                </View>
                             </View>
-                        </View>
-                    ))}
-                </ScrollView>
-            </View>
-
+                        ))}
+                    </ScrollView>
+                </View>
+            ) : (
+                <View style={styles.guestRegisterHistory}>
+                    <Text style={styles.guestRegisterHistoryText}>Please <Text style={[styles.guestRegisterHistoryText, {color: 'blue'}]} 
+                    onPress={() => navigation.navigate('Register')}>register</Text> to see the history.</Text>
+                </View>
+            )}
         </View>
     );
 };
@@ -192,7 +198,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start'
     },
     progressContainer: {
-        backgroundColor: '#E0F8D8', // Light gray background color
+        backgroundColor: '#E0F8D8',
         borderColor: 'black',
         borderWidth: 0,
         borderRadius: 10,
@@ -200,7 +206,7 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOffset: {
             width: 0,
-            height: 4, // Shadow below the container
+            height: 4,
         },
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
@@ -328,6 +334,13 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'bold',
     },
+    guestRegisterHistory: {
+        marginTop: 20,
+        alignSelf: 'flex-start',
+    },
+    guestRegisterHistoryText: {
+        fontSize: 20,
+    }
 });
 
 export default HomeScreen;

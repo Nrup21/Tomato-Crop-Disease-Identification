@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
-import { collection, doc, setDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, addDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const CameraComponent = () =>
@@ -63,12 +63,16 @@ const CameraComponent = () =>
                 //     confidence: data.confidence,
                 //     timestamp: serverTimestamp(), // to order the results by time
                 // });
-                const userDocRef = doc(db, "results", auth.currentUser.uid);
-                const newDocRef = await addDoc(collection(userDocRef, "data"), {
-                    imageUri: photo,
-                    prediction: data.prediction,
-                    confidence: data.confidence
-                });
+                // Check if the user is not anonymous before storing data
+                if (auth.currentUser && !auth.currentUser.isAnonymous)
+                {
+                    const userDocRef = doc(db, "results", auth.currentUser.uid);
+                    const newDocRef = await addDoc(collection(userDocRef, "data"), {
+                        imageUri: photo,
+                        prediction: data.prediction,
+                        confidence: data.confidence
+                    });
+                }
                 // Pass the image URI as a parameter
                 navigation.navigate('Results', { prediction: data.prediction, confidence: data.confidence, imageUri: photo });
             }

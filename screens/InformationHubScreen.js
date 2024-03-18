@@ -27,7 +27,7 @@ const InformationHubScreen = () => {
         <View style={styles.container}>
             <TextInput
                 style={styles.searchBar}
-                placeholder="Search cards..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
             />
@@ -61,14 +61,14 @@ const InformationHubScreen = () => {
 };
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
+        marginBottom: 20,
     },
     searchBar: {
         fontSize: 18,
         padding: 10,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'white',
         margin: 10,
         borderRadius: 10,
     },
@@ -89,10 +89,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 5,
     },
-
     suggestionsContainer: {
-        // keep your existing styles, and you might want to add
-        // additional styles to position your suggestions dropdown correctly
         backgroundColor: 'white',
         position: 'absolute',
         top: 50,
@@ -107,7 +104,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10, // Optional: for better spacing
         // Additional styles for the suggestion text items
     },
-    // ... the rest of your styles
 });
 
 export default InformationHubScreen;
