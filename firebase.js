@@ -2,20 +2,19 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import {getFirestore} from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDGH1EXCdr41OZolHiPiyftzPm8bvKmL6Y",
-  authDomain: "tomato-disease-identific-ba6d4.firebaseapp.com",
-  databaseURL: "https://tomato-disease-identific-ba6d4-default-rtdb.firebaseio.com",
-  projectId: "tomato-disease-identific-ba6d4",
-  storageBucket: "tomato-disease-identific-ba6d4.appspot.com",
-  messagingSenderId: "374304704954",
-  appId: "1:374304704954:web:63464cfd88377e3d663583",
-  measurementId: "G-EMBHG6QXGT"
+  apiKey: "AIzaSyCOBFMnoPcvW_OSIHy5j0OulI2UCz10Gt0",
+  authDomain: "tomatocrop-66f6d.firebaseapp.com",
+  projectId: "tomatocrop-66f6d",
+  storageBucket: "tomatocrop-66f6d.appspot.com",
+  messagingSenderId: "774873843581",
+  appId: "1:774873843581:web:bdd38f5ba283380e1c2e14"
 };
 
 // Initialize Firebase
@@ -24,5 +23,7 @@ initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 export { auth };
+export { db };
