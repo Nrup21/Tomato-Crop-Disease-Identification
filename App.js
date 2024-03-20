@@ -19,14 +19,14 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
     return (
         <Tab.Navigator
-            tabBarOptions={{
-                activeTintColor: 'blue',
-                inactiveTintColor: 'gray',
-                labelStyle: { fontSize: 12 },
+            screenOptions={{
+                tabBarActiveTintColor: '#2F4F4F',
+                tabBarInactiveTintColor: 'gray',
+                tabBarLabelStyle: { fontSize: 12 },
             }}
         >
             <Tab.Screen
-                name="HomeTab"
+                name="HOME"
                 component={HomeScreen}
                 options={{
                     tabBarLabel: 'Home',
@@ -37,10 +37,13 @@ const BottomTabNavigator = () => {
                             color={color}
                         />
                     ),
+                    headerStyle: {
+                        backgroundColor: '#2F4F4F',
+                    }
                 }}
             />
             <Tab.Screen
-                name="InformationHubTab"
+                name="Information Hub"
                 component={InformationHubScreen}
                 options={{
                     tabBarLabel: 'Information Hub',
@@ -54,7 +57,7 @@ const BottomTabNavigator = () => {
                 }}
             />
             <Tab.Screen
-                name="ContactUsTab"
+                name="Contact Us"
                 component={ContactUsScreen}
                 options={{
                     tabBarLabel: 'Contact Us',
@@ -80,9 +83,9 @@ const App = () => {
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name='Reset Password' component={ResetPasswordScreen} />
-                <Stack.Screen name="Home" component={BottomTabNavigator} />
-                <Stack.Screen name="Information Hub" component={BottomTabNavigator} />
-                <Stack.Screen name="Contact Us" component={BottomTabNavigator} />
+                <Stack.Screen name="Home" component={BottomTabNavigator} options={{ headerShown: false }} />
+                <Stack.Screen name="Information Hub" component={BottomTabNavigator} options={{ headerShown: false }}/>
+                <Stack.Screen name="Contact Us" component={BottomTabNavigator} options={{ headerShown: false }}/>
                 <Stack.Screen name="Camera" component={CameraComponent} options={{ headerShown: false }} />
                 <Stack.Screen name="Results" component={Results} />
             </Stack.Navigator>
