@@ -120,7 +120,7 @@ const HomeScreen = () =>
     return (
         <View style={styles.container}>
             <View style={styles.userEmailandSignOut}>
-                <Text style={{fontWeight: 'bold'}}>Hello, {firstName}</Text>
+                <Text style={{ fontSize: 15 }}>Hello, {firstName}</Text>
                 {!isAnonymous && (
                     <TouchableOpacity
                         style={styles.signOutButton}
@@ -137,16 +137,16 @@ const HomeScreen = () =>
                     <Text style={styles.buttonText}>Information Hub</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={styles.button}>
                     <Text style={styles.buttonText}>Disease Alert</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={styles.button}
                     onPress={() => navigation.navigate('Contact Us')}>
                     <Text style={styles.buttonText}>About Us</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
             <Text style={styles.title}>Heal your crop</Text>
@@ -162,8 +162,10 @@ const HomeScreen = () =>
 
             {!isAnonymous ? (
                 <View style={styles.HistoryView}>
-                    <Text style={styles.HistoryText}>History</Text>
-                    <ScrollView style={{ maxHeight: 250, width: 350 }}>
+                    <Text style={styles.HistoryText}>Your Diagnoses</Text>
+                    <ScrollView style={{ height: 230 }}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}>
                         {history.map((item, index) => (
                             <View key={index} style={styles.itemContainer}>
                                 <Image source={{ uri: item.imageUri }} style={styles.image} />
@@ -177,8 +179,8 @@ const HomeScreen = () =>
                 </View>
             ) : (
                 <View style={styles.guestRegisterHistory}>
-                    <Text style={styles.guestRegisterHistoryText}>Please <Text style={[styles.guestRegisterHistoryText, {color: 'blue'}]} 
-                    onPress={() => navigation.navigate('Register')}>register</Text> to see the history.</Text>
+                    <Text style={styles.guestRegisterHistoryText}>Please <Text style={[styles.guestRegisterHistoryText, { color: 'blue' }]}
+                        onPress={() => navigation.navigate('Register')}>register</Text> to see the history.</Text>
                 </View>
             )}
         </View>
@@ -280,8 +282,9 @@ const styles = StyleSheet.create({
     },
     HistoryView: {
         alignSelf: 'flex-start',
-        marginTop: 20,
-        marginLeft: 10,
+        marginTop: 30,
+        marginBottom: 10,
+        width: '100%'
     },
     arrowContainer: {
         // justifyContent: 'center',
@@ -316,7 +319,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 5,
         padding: 5,
-        backgroundColor: 'lightgray',
+        backgroundColor: 'white',
         borderRadius: 8,
         borderColor: 'black',
         borderWidth: 0.5,

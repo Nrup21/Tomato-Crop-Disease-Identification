@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const teamMembers = [
-    { photo: require('../assets/Nrup_Patel.png'), name: 'Abhishek Yawalkar', occupation: 'Founder', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/Nrup_Patel.png'), name: 'Nrup Patel', occupation: 'Co-founder', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/TCDI.png'), name: 'Sanjay Patel', occupation: 'CTO', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/TCDI.png'), name: 'Shreyansh Dalwadi', occupation: 'Designer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+    { photo: require('../assets/abhishek_yawalkar.jpg'), name: 'Abhishek Yawalkar', occupation: 'Software Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { photo: require('../assets/nrup_patel.png'), name: 'Nrup Patel', occupation: 'Software Enigneer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { photo: require('../assets/sanjay_patel.jpg'), name: 'Sanjay Patel', occupation: 'AI/ML Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { photo: require('../assets/shreyansh_dalwadi.jpg'), name: 'Shreyansh Dalwadi', occupation: 'Software Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
 ];
 
 const ContactUsScreen = () => {

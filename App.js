@@ -38,7 +38,7 @@ const BottomTabNavigator = () => {
                         />
                     ),
                     headerStyle: {
-                        backgroundColor: '#2F4F4F',
+                        backgroundColor: 'white',
                     }
                 }}
             />
