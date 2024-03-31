@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
-import { collection, doc, addDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const CameraComponent = () =>
@@ -70,7 +70,8 @@ const CameraComponent = () =>
                     const newDocRef = await addDoc(collection(userDocRef, "data"), {
                         imageUri: photo,
                         prediction: data.prediction,
-                        confidence: data.confidence
+                        confidence: data.confidence,
+                        timestamp: serverTimestamp(),
                     });
                 }
                 // Pass the image URI as a parameter
@@ -158,16 +159,17 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         padding: 20,
-        backgroundColor: '#000000a0',
+        // backgroundColor: '#000000a0',
     },
     button: {
-        padding: 10,
-        backgroundColor: 'white',
+        padding: 15,
+        backgroundColor: '#2F4F4F',
         borderRadius: 5,
+        width:'35%'
     },
     buttonText: {
         fontSize: 18,
-        color: 'black',
+        color: 'white',
         textAlign: 'center',
     },
     captureButtonContainer: {

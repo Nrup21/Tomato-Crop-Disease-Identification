@@ -101,7 +101,7 @@ const WelcomeScreen = () =>
         </View>
         <View style={{
           paddingHorizontal: 22,
-          position: "absolute",
+          // position: "absolute",
           top: 410,
           width: "100%"
         }}>
@@ -114,14 +114,14 @@ const WelcomeScreen = () =>
             fontSize: 46,
             fontWeight: 800,
             color: 'white'
-          }}>Started</Text>
+          }}>Started!</Text>
 
           <View style={{ marginTop: 10, marginBottom: 40 }}>
-            <Text style={{ fontSize: 16, color: 'white', marginVertical: 4 }}>
+            <Text style={{ fontSize: 18, color: 'white', marginTop: 10 }}>
               <Text style={{ fontWeight: 800 }}>Detect, Prevent, and Treat</Text> tomato crop diseases.</Text>
             <Text style={{
-              fontSize: 16,
-              color: 'white',
+              fontSize: 18,
+              color: 'white', marginTop: 3
             }}>Remember, a healthy crop is a happy crop!</Text>
           </View>
 
@@ -136,7 +136,7 @@ const WelcomeScreen = () =>
           </View>
 
           <TouchableOpacity style={styles.buttonGuest} onPress={onContinueAsGuest}>
-            <Text style={{ color: 'white', fontWeight: 700, fontSize: 17, marginTop: 15, textDecorationLine: 'underline' }}>Continue as Guest</Text>
+            <Text style={{ color: 'white', fontWeight: 500, fontSize: 17, textDecorationLine: 'underline' }}>Continue as Guest</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -149,38 +149,43 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
-    paddingHorizontal: 22,
-    margin: 'auto',
+    // padding: 30,
+    // margin: 'auto',
+    marginTop: 3,
+    alignItems: 'center',
+    // width: '80%',
+    // height: '30%',
+    justifyContent: 'space-evenly',
+  },
+  buttonGuest: {
+    // flexDirection: 'row',
+    // padding: 22,
+    // margin: 'auto',
     // marginTop: 10,
     alignItems: 'center',
     width: '100%',
     justifyContent: 'center',
-  },
-  buttonGuest: {
-    // flexDirection: 'row',
-    paddingHorizontal: 22,
-    margin: 'auto',
-    // marginTop: 10,
-    alignItems: 'center',
-    width: '100%',
-    // justifyContent: 'center',
+    marginTop: 10
   },
   button: {
-    backgroundColor: 'white',
-    width: '60%',
-    height: '50%',
+    backgroundColor: '#C74A43',
+    width: '40%',
+    height: '40%',
     paddingBottom: 16,
     paddingVertical: 10,
     // borderColor: 'black',
     // borderWidth: 2,
-    borderRadius: 12,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 5
+    margin: 5,
+    borderWidth: 1,
+    borderColor: 'white',
   },
   buttonText: {
-    color: 'black',
+    color: 'white',
     fontWeight: '700',
-    fontSize: 16
+    fontSize: 20,
+    fontVariant: ['small-caps']
   }
 })

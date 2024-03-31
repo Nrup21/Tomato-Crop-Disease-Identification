@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons'; // Import MaterialIcons from expo/vector-icons
 import tomatoDiseasesData from '../assets/tomato_diseases.json';
 
 
@@ -13,9 +14,10 @@ const InformationHubScreen = () => {
         prevention_and_treatment: disease.prevention_and_treatment,
     })));
 
+    const sortedCards = [...cards].sort((a, b) => a.heading.localeCompare(b.heading));
 
 
-    const filteredCards = cards.filter(card =>
+    const filteredCards = sortedCards.filter(card =>
         card.heading.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -23,14 +25,26 @@ const InformationHubScreen = () => {
         setOpenCardId(openCardId === cardId ? null : cardId);
     };
 
+    const clearSearch = () => {
+        setSearchQuery('');
+    };
+
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.searchBar}
-                placeholder="Search..."
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-            />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+                {searchQuery ? (
+                    <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+                        <MaterialIcons name="clear" size={24} color="black" />
+                    </TouchableOpacity>
+                ) : null}
+            </View>
+
             {searchQuery ? (
                 <View style={styles.suggestionsContainer}>
                     {filteredCards.map((card) => (
@@ -65,6 +79,14 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 20,
     },
+
+    searchContainer: {
+        //flexDirection: 'row',
+        //alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: '100%',
+    },
+
     searchBar: {
         fontSize: 18,
         padding: 10,
@@ -72,6 +94,13 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
     },
+
+    clearButton: {
+        position: 'absolute',
+        right: 12,
+        top: '35%',
+        color: '#333',    },
+
     card: {
         backgroundColor: '#fff',
         padding: 15,
@@ -85,10 +114,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
     },
+
     heading: {
         fontSize: 20,
         marginBottom: 5,
     },
+
     suggestionsContainer: {
         backgroundColor: 'white',
         position: 'absolute',
@@ -98,6 +129,7 @@ const styles = StyleSheet.create({
         zIndex: 1
         // Add more styles like padding, shadow, etc, as per your design requirements
     },
+
     suggestionText: {
         fontSize: 20, // Increased font size
         paddingVertical: 5, // Optional: for better touch targets
