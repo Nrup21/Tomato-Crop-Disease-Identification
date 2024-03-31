@@ -21,7 +21,7 @@ const BottomTabNavigator = () => {
         <Tab.Navigator
             screenOptions={{
                 tabBarActiveTintColor: '#2F4F4F',
-                tabBarInactiveTintColor: 'gray',
+                tabBarInactiveTintColor: '#2F4F4F',
                 tabBarLabelStyle: { fontSize: 12 },
             }}
         >
@@ -30,6 +30,8 @@ const BottomTabNavigator = () => {
                 component={HomeScreen}
                 options={{
                     tabBarLabel: 'Home',
+                    headerTitle: 'Home',
+                    headerTitleAlign: 'center',
                     tabBarIcon: ({ color, size, focused }) => (
                         <Ionicons
                             name={focused ? 'home' : 'home-outline'}
@@ -47,6 +49,7 @@ const BottomTabNavigator = () => {
                 component={InformationHubScreen}
                 options={{
                     tabBarLabel: 'Information Hub',
+                    headerTitleAlign: 'center',
                     tabBarIcon: ({ color, size, focused }) => (
                         <Ionicons
                             name={focused ? 'information-circle' : 'information-circle-outline'}
@@ -57,10 +60,11 @@ const BottomTabNavigator = () => {
                 }}
             />
             <Tab.Screen
-                name="Contact Us"
+                name="About Us"
                 component={ContactUsScreen}
                 options={{
-                    tabBarLabel: 'Contact Us',
+                    tabBarLabel: 'About Us',
+                    headerTitleAlign: 'center',
                     tabBarIcon: ({ color, size, focused }) => (
                         <Ionicons
                             name={focused ? 'call' : 'call-outline'}
@@ -85,9 +89,9 @@ const App = () => {
                 <Stack.Screen name='Reset Password' component={ResetPasswordScreen} />
                 <Stack.Screen name="Home" component={BottomTabNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="Information Hub" component={BottomTabNavigator} options={{ headerShown: false }}/>
-                <Stack.Screen name="Contact Us" component={BottomTabNavigator} options={{ headerShown: false }}/>
+                <Stack.Screen name="About Us" component={BottomTabNavigator} options={{ headerShown: false }}/>
                 <Stack.Screen name="Camera" component={CameraComponent} options={{ headerShown: false }} />
-                <Stack.Screen name="Results" component={Results} />
+                <Stack.Screen name="Results" component={Results} options={{ headerTitleAlign: 'center', headerBackVisible: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

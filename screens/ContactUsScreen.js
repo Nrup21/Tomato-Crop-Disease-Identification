@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const teamMembers = [
-    { photo: require('../assets/abhishek_yawalkar.jpg'), name: 'Abhishek Yawalkar', occupation: 'Software Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/nrup_patel.png'), name: 'Nrup Patel', occupation: 'Software Enigneer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/sanjay_patel.jpg'), name: 'Sanjay Patel', occupation: 'AI/ML Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { photo: require('../assets/shreyansh_dalwadi.jpg'), name: 'Shreyansh Dalwadi', occupation: 'Software Engineer', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+    { photo: require('../assets/abhishek_yawalkar.jpg'), name: 'Abhishek Yawalkar', occupation: 'Mobile App Developer', details: 'Email: yawalka@uwindsor.ca' },
+    { photo: require('../assets/nrup_patel.png'), name: 'Nrup Patel', occupation: 'Mobile App Developer', details: 'Email: patel616@uwindsor.ca' },
+    { photo: require('../assets/sanjay_patel.jpg'), name: 'Sanjay Patel', occupation: 'Website & AI/ML Developer', details: 'Email: patel7e6@uwindsor.ca' },
+    { photo: require('../assets/shreyansh_dalwadi.jpg'), name: 'Shreyansh Dalwadi', occupation: 'Website Developer', details: 'Email: dalwadi2@uwindsor.ca' }
 ];
 
 const ContactUsScreen = () => {
@@ -17,6 +17,7 @@ const ContactUsScreen = () => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.title}>AgroTech Team</Text>
             <View style={styles.row}>
                 {teamMembers.map((member, index) => (
                     <TouchableOpacity key={index} style={styles.memberContainer} onPress={() => handleCardPress(index)}>
@@ -40,6 +41,13 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 20,
+        alignSelf: 'center',
+    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -47,18 +55,19 @@ const styles = StyleSheet.create({
     },
     memberContainer: {
         alignItems: 'center', // Center content horizontally
-        marginVertical: 10, // Adjust to your preference
+        marginVertical: 20, // Adjust to your preference
         width: '45%', // Set width for each card, adjust as needed
     },
     photo: {
         width: 150, // Adjust to your preference
-        height: 250, // Adjust to your preference
-        borderRadius: 50, // Adjust for circular images
+        height: 200, // Adjust to your preference
+        borderRadius: 15, // Adjust for circular images
     },
     name: {
-        fontWeight: 'bold',
-        marginTop: 4, // Adjust to your preference
+        fontWeight: '500',
+        marginTop: 10, // Adjust to your preference
         textAlign: 'center', // Center text horizontally
+        fontSize: 18,
     },
     occupation: {
         fontWeight: 'bold',

@@ -74,11 +74,16 @@ const HomeScreen = () =>
                 // console.log(doc.data());  // Log the data
                 historyData.push(doc.data());
             });
+            // Sort the historyData array in descending order of timestamp
+            historyData.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
             setHistory(historyData);
         };
 
-        fetchData();
-    }, []);
+        const unsubscribe = navigation.addListener('focus', fetchData);
+
+        // Clean up the event listener when you're done
+        return unsubscribe;
+    }, [navigation]);
 
 
     const handleSignOut = () =>
@@ -166,15 +171,40 @@ const HomeScreen = () =>
                     <ScrollView style={{ height: 230 }}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}>
-                        {history.map((item, index) => (
-                            <View key={index} style={styles.itemContainer}>
-                                <Image source={{ uri: item.imageUri }} style={styles.image} />
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.text}>Prediction: {item.prediction}</Text>
-                                    <Text style={styles.text}>Confidence: {item.confidence}</Text>
+                        {history.map((item, index) =>
+                        {
+                            let containerColor;
+                            switch (item.prediction)
+                            {
+                                case 'Healthy':
+                                    containerColor = 'rgba(0, 128, 0, 0.4)';
+                                    break;
+                                case 'Bacterial Spot':
+                                case 'Early Blight':
+                                case 'Late Blight':
+                                case 'Buckeye Rot':
+                                case 'Tomato Yellow Leaf Curl':
+                                    containerColor = 'rgba(255, 255, 0, 0.4)';
+                                    break;
+                                case 'Leaf Mold':
+                                case 'Septoria Leaf Spot':
+                                case 'Tomato Mosaic Virus':
+                                case 'Tomato Spotted Wilt':
+                                    containerColor = 'rgba(255, 0, 0, 0.6)';
+                                    break;
+                                default:
+                                    containerColor = 'white';
+                            }
+                            return (
+                                <View key={index} style={[styles.itemContainer, { backgroundColor: containerColor }]}>
+                                    <Image source={{ uri: item.imageUri }} style={styles.image} />
+                                    <View style={styles.textContainer}>
+                                        <Text style={styles.text}>Prediction: {item.prediction}</Text>
+                                        <Text style={styles.text}>Confidence: {item.confidence}</Text>
+                                    </View>
                                 </View>
-                            </View>
-                        ))}
+                            );
+                        })}
                     </ScrollView>
                 </View>
             ) : (
@@ -256,7 +286,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'black',
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 20,
         paddingVertical: 20,
     },
     buttonTakeaPhoto: {
@@ -332,10 +362,13 @@ const styles = StyleSheet.create({
     textContainer: {
         // flexDirection: 'row',
         marginLeft: 10,
+        // padding: 5,
+        width: '70%'
     },
     text: {
-        fontSize: 13,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
+        flexShrink: 1,
     },
     guestRegisterHistory: {
         marginTop: 20,
