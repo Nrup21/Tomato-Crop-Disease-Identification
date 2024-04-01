@@ -72,6 +72,7 @@ const Results = ({ route }) =>
                     renderItem={({ item }) => (
                         <View >
                             {/* <Text style={styles.heading}>{item.name}</Text> */}
+                            <Text style={{ fontWeight: 'bold'}}>Information:</Text>
                             <Text style={styles.information}>{item.information + '\n'}</Text>
                             <Text style={styles.prevention}>
                                 <Text style={{ fontWeight: 'bold' }}>Prevention and Treatment:</Text>

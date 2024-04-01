@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const teamMembers = [
-    { photo: require('../assets/abhishek_yawalkar.jpg'), name: 'Abhishek Yawalkar', occupation: 'Mobile App Developer', details: 'Email: yawalka@uwindsor.ca' },
-    { photo: require('../assets/nrup_patel.png'), name: 'Nrup Patel', occupation: 'Mobile App Developer', details: 'Email: patel616@uwindsor.ca' },
-    { photo: require('../assets/sanjay_patel.jpg'), name: 'Sanjay Patel', occupation: 'Website & AI/ML Developer', details: 'Email: patel7e6@uwindsor.ca' },
-    { photo: require('../assets/shreyansh_dalwadi.jpg'), name: 'Shreyansh Dalwadi', occupation: 'Website Developer', details: 'Email: dalwadi2@uwindsor.ca' }
+    { photo: require('../assets/abhishek_yawalkar.jpg'), name: 'Abhishek Yawalkar', occupation: 'Mobile App Developer', details: 'yawalka@uwindsor.ca' },
+    { photo: require('../assets/nrup_patel.png'), name: 'Nrup Patel', occupation: 'Mobile App Developer', details: 'patel616@uwindsor.ca' },
+    { photo: require('../assets/sanjay_patel.jpg'), name: 'Sanjay Patel', occupation: 'AI/ML Developer', details: 'patel7e6@uwindsor.ca' },
+    { photo: require('../assets/shreyansh_dalwadi.jpg'), name: 'Shreyansh Dalwadi', occupation: 'Website Developer', details: 'dalwadi2@uwindsor.ca' }
 ];
 
 const ContactUsScreen = () => {
@@ -26,6 +26,7 @@ const ContactUsScreen = () => {
                         {openCardIndex === index && (
                             <View style={styles.detailsContainer}>
                                 <Text style={styles.occupation}>{member.occupation}</Text>
+                                <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Email:</Text>
                                 <Text style={styles.details}>{member.details}</Text>
                             </View>
                         )}
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 15,
         alignSelf: 'center',
     },
     row: {
