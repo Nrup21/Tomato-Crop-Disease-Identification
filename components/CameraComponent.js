@@ -112,6 +112,12 @@ const CameraComponent = () =>
         );
     }
 
+    const cancelPicture = () =>
+    {
+        // Add your own logic here to handle cancel action
+        navigation.goBack();
+    }
+
     return (
         photo ? (
             <View style={styles.container}>
@@ -126,8 +132,12 @@ const CameraComponent = () =>
                 </View>
             </View>
         ) : (
-            <Camera style={styles.container} flashMode={flashMode} ref={cameraRef}>
+            <Camera style={styles.container} flashMode={flashMode} ref={cameraRef}
+                autoFocus={Camera.Constants.AutoFocus.on}>
                 <View style={styles.captureButtonContainer}>
+                    <TouchableOpacity style={styles.cancelButton} onPress={cancelPicture}>
+                        <Icon name="close" size={30} color="white" />
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
                         <Icon name="images" size={30} color="white" />
                     </TouchableOpacity>
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: '#2F4F4F',
         borderRadius: 5,
-        width:'35%'
+        width: '35%'
     },
     buttonText: {
         fontSize: 18,
@@ -191,7 +201,7 @@ const styles = StyleSheet.create({
     flashButton: {
         position: 'absolute',
         top: 40,
-        right: 20,
+        left: 20,
     },
     galleryButton: {
         position: 'absolute',
@@ -199,6 +209,11 @@ const styles = StyleSheet.create({
         left: 0,
         padding: 20,
         marginLeft: 40,
+    },
+    cancelButton: {
+        position: 'absolute',
+        top: 40,
+        right: 20,
     },
 });
 
