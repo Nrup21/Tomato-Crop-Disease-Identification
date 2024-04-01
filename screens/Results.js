@@ -24,18 +24,19 @@ const Results = ({ route }) =>
                 setContainerColor('rgba(0, 128, 0, 0.4)');
                 setMessage('Plant is healthy.');
                 break;
+            case 'Leaf Mold':
+            case 'Septoria Leaf Spot':
+            case 'Tomato Mosaic Virus':
+            case 'Tomato Spotted Wilt':
+                setContainerColor('rgba(255, 255, 0, 0.4)');
+                setMessage('Plant does not require immediate attention.');
+                break;
             case 'Bacterial Spot':
             case 'Early Blight':
             case 'Late Blight':
             case 'Buckeye Rot':
             case 'Tomato Yellow Leaf Curl':
-                setContainerColor('rgba(255, 255, 0, 0.4)');
-                setMessage('Plant does not require immediate attention.');
-                break;
-            case 'Leaf Mold':
-            case 'Septoria Leaf Spot':
-            case 'Tomato Mosaic Virus':
-            case 'Tomato Spotted Wilt':
+
                 setContainerColor('rgba(255, 0, 0, 0.75)');
                 setMessage('Plant requires immediate attention.');
                 break;
@@ -72,7 +73,7 @@ const Results = ({ route }) =>
                     renderItem={({ item }) => (
                         <View >
                             {/* <Text style={styles.heading}>{item.name}</Text> */}
-                            <Text style={{ fontWeight: 'bold'}}>Information:</Text>
+                            <Text style={{ fontWeight: 'bold' }}>Information:</Text>
                             <Text style={styles.information}>{item.information + '\n'}</Text>
                             <Text style={styles.prevention}>
                                 <Text style={{ fontWeight: 'bold' }}>Prevention and Treatment:</Text>
@@ -154,13 +155,13 @@ const styles = StyleSheet.create({
         lineHeight: 25,
         fontSize: 16,
     },
-    message: { 
-        padding: 15, 
+    message: {
+        padding: 15,
         borderRadius: 10,
-        width: '100%', 
-        alignItems: 'center', 
-        marginBottom: 15, 
-        borderWidth: 0.5, 
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: 15,
+        borderWidth: 0.5,
         borderColor: 'black'
     },
 });

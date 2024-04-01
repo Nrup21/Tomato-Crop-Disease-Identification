@@ -7,7 +7,8 @@ import { collection, doc, getDocs } from "firebase/firestore";
 import { Camera } from 'expo-camera';
 import { FontAwesome } from '@expo/vector-icons';
 
-const ProgressBar = ({ steps }) => {
+const ProgressBar = ({ steps }) =>
+{
     return (
         <View style={styles.progressBar}>
             {steps.map((step, index) => (
@@ -27,7 +28,8 @@ const ProgressBar = ({ steps }) => {
     );
 };
 
-const HomeScreen = () => {
+const HomeScreen = () =>
+{
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
@@ -40,27 +42,35 @@ const HomeScreen = () => {
         { name: 'Get medicine', icon: 'medkit' },
     ];
 
-    useEffect(() => {
-        if (auth.currentUser) {
+    useEffect(() =>
+    {
+        if (auth.currentUser)
+        {
             setIsAnonymous(auth.currentUser.isAnonymous);
-            if (auth.currentUser.isAnonymous) {
+            if (auth.currentUser.isAnonymous)
+            {
                 setFirstName('Guest');
-            } else {
+            } else
+            {
                 const userId = auth.currentUser.uid;
                 const dbRef = ref(getDatabase(), '/users/' + userId + '/firstName');
-                onValue(dbRef, (snapshot) => {
+                onValue(dbRef, (snapshot) =>
+                {
                     setFirstName(snapshot.val());
                 });
             }
         }
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
+    useEffect(() =>
+    {
+        const fetchData = async () =>
+        {
             const userDocRef = doc(db, "results", auth.currentUser.uid);
             const querySnapshot = await getDocs(collection(userDocRef, "data"));
             const historyData = [];
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach((doc) =>
+            {
                 // console.log(doc.data());  // Log the data
                 historyData.push(doc.data());
             });
@@ -76,21 +86,27 @@ const HomeScreen = () => {
     }, [navigation]);
 
 
-    const handleSignOut = () => {
-        if (!isAnonymous) {
+    const handleSignOut = () =>
+    {
+        if (!isAnonymous)
+        {
             auth.signOut()
-                .then(() => {
+                .then(() =>
+                {
                     navigation.replace("Login");
                 })
                 .catch(error => Alert.alert('Error', error.message));
         }
     };
 
-    const handleTakePhoto = async () => {
+    const handleTakePhoto = async () =>
+    {
         const { status } = await Camera.requestCameraPermissionsAsync();
-        if (status === 'granted') {
+        if (status === 'granted')
+        {
             navigation.navigate('Camera');
-        } else {
+        } else
+        {
             Alert.alert(
                 "Permission Required",
                 "Allow AgroTech to take pictures?",
@@ -118,7 +134,7 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                 )}
             </View>
-            <ScrollView style={{ height: '100%', width: '105%', marginTop: 35 }}
+            <ScrollView style={{ height: '100%', width: '105%', marginTop: 35, }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}>
                 <View style={styles.buttonRow}>
@@ -139,28 +155,32 @@ const HomeScreen = () => {
                         <Text style={[styles.buttonText, { color: 'white' }]}>Take a Photo</Text>
                     </TouchableOpacity>
                 </View>
-
+                {!isAnonymous && history.length === 0 && (
+                    <Text style={styles.noHistoryText}>Start clicking pictures to see the history.</Text>
+                )}
                 {!isAnonymous ? (
                     <View style={styles.HistoryView}>
                         <Text style={styles.HistoryText}>Your Diagnoses</Text>
 
-                        {history.map((item, index) => {
+                        {history.map((item, index) =>
+                        {
                             let containerColor;
-                            switch (item.prediction) {
+                            switch (item.prediction)
+                            {
                                 case 'Healthy':
                                     containerColor = 'rgba(0, 128, 0, 0.4)';
+                                    break;
+                                case 'Leaf Mold':
+                                case 'Septoria Leaf Spot':
+                                case 'Tomato Mosaic Virus':
+                                case 'Tomato Spotted Wilt':
+                                    containerColor = 'rgba(255, 255, 0, 0.4)';
                                     break;
                                 case 'Bacterial Spot':
                                 case 'Early Blight':
                                 case 'Late Blight':
                                 case 'Buckeye Rot':
                                 case 'Tomato Yellow Leaf Curl':
-                                    containerColor = 'rgba(255, 255, 0, 0.4)';
-                                    break;
-                                case 'Leaf Mold':
-                                case 'Septoria Leaf Spot':
-                                case 'Tomato Mosaic Virus':
-                                case 'Tomato Spotted Wilt':
                                     containerColor = 'rgba(255, 0, 0, 0.6)';
                                     break;
                                 default:
@@ -180,7 +200,7 @@ const HomeScreen = () => {
                 ) : (
                     <View style={styles.guestRegisterHistory}>
                         <Text style={styles.guestRegisterHistoryText}>Please <Text style={[styles.guestRegisterHistoryText, { color: 'blue' }]}
-                            onPress={() => navigation.navigate('Register')}>register</Text> to see the history.</Text>
+                            onPress={() => navigation.navigate('Register')}>Register/Log In</Text> to store and see the history.</Text>
                     </View>
                 )}
             </ScrollView>
@@ -350,6 +370,14 @@ const styles = StyleSheet.create({
     },
     guestRegisterHistoryText: {
         fontSize: 20,
+    },
+    noHistoryText: {
+        fontSize: 20,
+        // fontStyle: 'italic',
+        marginTop: 20,
+        // marginBottom: 10,
+        marginHorizontal: 25,
+        alignSelf: 'center'
     }
 });
 
