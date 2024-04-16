@@ -1,1 +1,10 @@
-
+![1](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/1d64fc66-4737-482e-b3cf-bc074209e820)
+![2](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/ad9f1973-a092-4e67-9794-f0bfd4ff233a)
+![3](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/ecadfe4b-69c8-4291-ac96-bcb6aff220d1)
+![4](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/bee16cd8-37ab-4322-8e91-3c4c181ecea1)
+![5](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/7bcf1a96-f578-4cc1-8eab-4d5073bc556a)
+![6](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/bd2366f6-42a4-445d-8bc8-9b004de6c1f1)
+![7](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/6150be34-e4b1-4d7e-b7a8-7a32b0f9ff2b)
+![8](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/692311d2-27b3-408d-b009-8c52661bcdd5)
+![9](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/eaad73a4-2f7d-4da7-abec-535df751043b)
+![10](https://github.com/Nrup21/Tomato-Crop-Disease-Identification/assets/23332110/fddcd305-777e-40ad-bdfa-1cfdbe57ef7d)
